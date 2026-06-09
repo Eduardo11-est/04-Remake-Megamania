@@ -1,0 +1,268 @@
+:root {
+  --bg-0: #05021a;
+  --bg-1: #0b0420;
+  --bg-2: #16093a;
+  --neon-pink: #ff4dd2;
+  --neon-cyan: #4dffff;
+  --neon-yellow: #ffd54a;
+  --neon-orange: #ff8a3d;
+  --ui-shadow: 0 0 0 2px #0b0420, 0 0 0 4px #ff4dd2;
+  --pixel: "Press Start 2P", "VT323", ui-monospace, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, var(--bg-2) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+  color: #fff;
+  font-family: var(--pixel);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+}
+
+#game {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  background: #000;
+  width: min(100vw, calc(100vh * 0.6667));
+  height: min(100vh, calc(100vw * 1.5));
+  max-width: 720px;
+  max-height: 1080px;
+  box-shadow:
+    0 0 0 4px #1d0e3a,
+    0 0 0 6px var(--neon-pink),
+    0 0 24px rgba(255, 77, 210, 0.35),
+    0 0 64px rgba(77, 255, 255, 0.15);
+  border-radius: 6px;
+  touch-action: none;
+}
+
+/* Reduz a altura do canvas para dar espaco aos controles de toque e evitar corte no topo */
+.stage:has(.touch:not(.hidden)) #game {
+  height: min(calc(100vh - 180px), calc(100vw * 1.5));
+  width: min(100vw, calc((100vh - 180px) * 0.6667));
+}
+
+.touch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  width: min(100vw, calc(100vh * 0.6667));
+  max-width: 720px;
+  pointer-events: none;
+  background: rgba(11, 4, 32, 0.92);
+  border: 2px solid #1d0e3a;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow:
+    0 0 0 2px var(--neon-pink),
+    0 0 24px rgba(255, 77, 210, 0.25);
+}
+
+.touch-utils {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.utbtn {
+  flex: 1;
+  pointer-events: auto;
+  background: rgba(26, 10, 61, 0.7);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-family: var(--pixel);
+  font-size: 10px;
+  padding: 8px 0;
+  border-radius: 6px;
+  text-align: center;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.utbtn:active {
+  background: var(--neon-cyan);
+  color: var(--bg-0);
+}
+
+.touch-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.touch.hidden { display: none; }
+
+.tbtn {
+  pointer-events: auto;
+  background: rgba(11, 4, 32, 0.55);
+  border: 2px solid rgba(77, 255, 255, 0.4);
+  color: var(--neon-cyan);
+  border-radius: 12px;
+  padding: 14px 0;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transition: transform 0.06s ease, background 0.12s ease, border-color 0.12s ease;
+  touch-action: none;
+}
+
+.tbtn svg { width: 36px; height: 36px; }
+
+.tbtn.active {
+  transform: translateY(2px) scale(0.96);
+  background: rgba(255, 77, 210, 0.4);
+  border-color: var(--neon-pink);
+  color: #fff;
+}
+
+.tbtn.fire {
+  background: rgba(255, 213, 74, 0.2);
+  border-color: var(--neon-yellow);
+  color: var(--neon-yellow);
+}
+
+.tbtn.fire.active {
+  background: var(--neon-yellow);
+  color: var(--bg-0);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 2, 26, 0.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+  transition: opacity 0.2s ease;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card {
+  width: min(86%, 360px);
+  background: linear-gradient(180deg, #1a0a3d 0%, #0b0420 100%);
+  border: 2px solid var(--neon-pink);
+  box-shadow: 0 0 24px rgba(255, 77, 210, 0.5), inset 0 0 0 2px #0b0420;
+  padding: 18px 16px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 8px var(--neon-pink), 2px 2px 0 #b0348b;
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 9px;
+  color: var(--neon-cyan);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  opacity: 0.85;
+}
+
+.controls-help {
+  text-align: left;
+  font-size: 9px;
+  line-height: 1.7;
+  margin: 0 auto 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed rgba(77, 255, 255, 0.4);
+  padding: 8px 10px;
+  border-radius: 3px;
+}
+
+.controls-help b { color: var(--neon-yellow); margin-right: 4px; }
+.controls-help span { color: #cdb5ff; }
+
+.legend {
+  font-size: 8px;
+  line-height: 1.5;
+  color: #d2c0ff;
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+
+.legend .themes {
+  margin-top: 6px;
+  color: var(--neon-cyan);
+  letter-spacing: 1px;
+  font-size: 8px;
+}
+
+.btn {
+  background: var(--neon-pink);
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 12px 24px;
+  font-family: var(--pixel);
+  font-size: 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--neon-pink), 4px 4px 0 #6a1660;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  border-radius: 2px;
+}
+
+.btn:hover { background: var(--neon-yellow); color: var(--bg-0); box-shadow: 0 0 0 2px var(--neon-yellow), 4px 4px 0 #8a6a00; }
+.btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 2px var(--neon-pink), 2px 2px 0 #6a1660; }
+
+@media (max-aspect-ratio: 1/1) {
+  #game {
+    width: min(100vw, calc(100vh * 0.6667));
+    height: min(100vh, calc(100vw * 1.5));
+  }
+  .stage:has(.touch:not(.hidden)) #game {
+    height: min(calc(100vh - 180px), calc(100vw * 1.5));
+    width: min(100vw, calc((100vh - 180px) * 0.6667));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch:not(.hidden) { display: flex; }
+}

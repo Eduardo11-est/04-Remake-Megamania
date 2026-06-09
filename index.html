@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0420" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Cosmic Feast - Shmup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230b0420'/><polygon points='8,3 12,12 8,10 4,12' fill='%23ffd54a'/></svg>" />
+</head>
+<body>
+  <div id="app">
+    <div id="stage" class="stage">
+      <canvas id="game" width="640" height="960" aria-label="Cosmic Feast game canvas"></canvas>
+
+      <div id="touch" class="touch hidden" aria-hidden="true">
+        <div class="touch-utils">
+          <button id="btn-pause" class="utbtn" aria-label="Pause game">PAUSE</button>
+          <button id="btn-mute" class="utbtn" aria-label="Mute sound">MUTE</button>
+        </div>
+        <div class="touch-actions">
+          <button class="tbtn" data-act="left" aria-label="Move left">
+            <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="tbtn fire" data-act="fire" aria-label="Fire">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <button class="tbtn" data-act="right" aria-label="Move right">
+            <svg viewBox="0 0 24 24"><path d="M9 6 15 12l-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="overlay" class="overlay">
+        <div class="card">
+          <h1 class="title">COSMIC FEAST</h1>
+          <p class="subtitle">A pixel-art shmup feast</p>
+          <div class="controls-help">
+            <div><b>Move:</b> <span>Arrows / A,D / Touch</span></div>
+            <div><b>Fire:</b> <span>Space / Tap FIRE</span></div>
+            <div><b>Pause:</b> <span>P / Esc</span></div>
+            <div><b>Mute:</b> <span>M</span></div>
+          </div>
+          <div class="legend">
+            <p>Destroy complete waves to refuel your ship. Don't run out of energy!</p>
+            <p class="themes">Burgers &middot; Cookies &middot; Irons &middot; Bow Ties &middot; Diamonds</p>
+          </div>
+          <button id="start" class="btn">START</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
